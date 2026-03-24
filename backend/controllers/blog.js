@@ -54,4 +54,16 @@ const updateBlog = async (req, res) => {
     }
 }
 
-module.exports = { APIHealth, getBlog, postBlog, updateBlog };
+const deleteBlog = async (req, res) => {
+    try {
+        const blog = await Blog.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            success: true,
+            blog: blog
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { APIHealth, getBlog, postBlog, updateBlog, deleteBlog };
