@@ -27,4 +27,16 @@ const getBlog = async (req, res) => {
     }
 };
 
-module.exports = { APIHealth, getBlog };
+const postBlog = async (req, res) => {
+    try {
+        const blog = await Blog.create(req.body);
+        res.status(201).json({
+            success: true,
+            blog: blog
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { APIHealth, getBlog, postBlog };
