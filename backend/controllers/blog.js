@@ -39,4 +39,19 @@ const postBlog = async (req, res) => {
     }
 }
 
-module.exports = { APIHealth, getBlog, postBlog };
+const updateBlog = async (req, res) => {
+    try {
+        const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        });
+        res.status(200).json({
+            success: true,
+            blog: blog
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+module.exports = { APIHealth, getBlog, postBlog, updateBlog };
