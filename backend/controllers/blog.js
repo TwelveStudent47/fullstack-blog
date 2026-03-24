@@ -1,5 +1,30 @@
-const APIHealth = (req,res) => {
+const Blog = require("../models/blog");
+
+const APIHealth = (req, res) => {
     res.status(200).json({ health: "The API is healthy"} );
 };
 
-module.exports = { APIHealth };
+const getBlog = async (req, res) => {
+    try {
+        const queryObject = {};
+        const { title, author } = req.query;
+
+        if (title) {
+            queryObject.title = { $regex: title, $options: "i" };
+        }
+
+        if (author) {
+            queryObject.author = { $regex: author, $options: "i" };
+        }
+
+        const blogs = await Blog.find(queryObject);
+        res.status(200).json({
+            nbHits: blogs.length,
+            blogs: blogs
+        });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+module.exports = { APIHealth, getBlog };
